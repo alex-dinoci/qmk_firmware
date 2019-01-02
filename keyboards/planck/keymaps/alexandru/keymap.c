@@ -1,4 +1,6 @@
+#include "quantum.h"
 #include QMK_KEYBOARD_H
+#include "process_keycode/process_tap_dance.h"
 extern keymap_config_t keymap_config;
 
 enum planck_layers {
@@ -19,6 +21,16 @@ enum planck_keycodes {
 #define LOWER MO(_LOWER)
 #define RAISE MO(_RAISE)
 
+enum {
+  TD_LBR = 0,
+  TD_RBR = 1
+};
+
+qk_tap_dance_action_t tap_dance_actions[] = {
+  [TD_LBR]  = ACTION_TAP_DANCE_DOUBLE(KC_LPRN, KC_LCBR),
+  [TD_RBR]  = ACTION_TAP_DANCE_DOUBLE(KC_RPRN, KC_RCBR)
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_QWERTY] = LAYOUT_planck_grid(
@@ -30,7 +42,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 [_LOWER] = LAYOUT_planck_grid(
      KC_GRV,  KC_EXLM,    KC_AT,  KC_HASH,   KC_DLR,      KC_PERC,  KC_CIRC,  KC_AMPR,     KC_ASTR,    KC_LPRN,    KC_RPRN,  KC_BSPC,
-    _______,  _______,  KC_LCBR,  KC_LBRC,  KC_LPRN,     KC_MINUS,   KC_EQL,  KC_RPRN,     KC_RBRC,    KC_RCBR,  KC_BSLASH,  _______,
+    _______,  _______,  KC_LCBR,  KC_LBRC,  TD(TD_LBR),     KC_MINUS,   KC_EQL,  TD(TD_RBR),     KC_RBRC,    KC_RCBR,  KC_BSLASH,  _______,
     _______,  _______,  _______,  TEST_MACRO,   KC_DLR,      KC_UNDS,  KC_PLUS,  KC_PIPE,  S(KC_COMM),  S(KC_DOT),    _______,  _______,
     _______,  _______,  _______,  _______,  _______,      _______,  _______,  _______,     _______,    _______,    _______,  _______
 ),
